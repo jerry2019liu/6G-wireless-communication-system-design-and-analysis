@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6G System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border-color: #4facfe;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.6);
+        }
+        
+        .diagram-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .diagram-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .architecture-svg {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .description {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4facfe;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+        
+        .description h3 {
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+        
+        .component-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .component-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #00f2fe;
+        }
+        
+        .component-item h4 {
+            color: #00f2fe;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+        
+        .component-item p {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 6G Wireless Communication System</h1>
+        <p class="subtitle">Model-Based Systems Engineering Architecture</p>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showDiagram('system')">System Architecture</button>
+            <button class="tab-btn" onclick="showDiagram('layers')">Protocol Layers</button>
+            <button class="tab-btn" onclick="showDiagram('poc')">MATLAB POC Flow</button>
+            <button class="tab-btn" onclick="showDiagram('deployment')">Deployment View</button>
+            <button class="tab-btn" onclick="showDiagram('data')">Data Flow</button>
+        </div>
+        
+        <!-- System Architecture Diagram -->
+        <div id="system" class="diagram-container active">
+            <div class="architecture-svg">
+                <svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:0.8" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Title -->
+                    <text x="700" y="40" text-anchor="middle" fill="url(#grad1)" font-size="28" font-weight="bold">6G System Architecture - High Level</text>
+                    
+                    <!-- User Equipment Layer -->
+                    <rect x="50" y="80" width="280" height="180" rx="10" fill="rgba(79, 172, 254, 0.2)" stroke="#4facfe" stroke-width="2"/>
+                    <text x="190" y="110" text-anchor="middle" fill="#4facfe" font-size="18" font-weight="bold">User Equipment</text>
+                    
+                    <rect x="70" y="130" width="240" height="45" rx="5" fill="url(#grad1)" opacity="0.8"/>
+                    <text x="190" y="158" text-anchor="middle" fill="#fff" font-size="14">THz Transceiver (140 GHz)</text>
+                    
+                    <rect x="70" y="185" width="240" height="45" rx="5" fill="url(#grad1)" opacity="0.8"/>
+                    <text x="190" y="213" text-anchor="middle" fill="#fff" font-size="14">Massive MIMO Array (8x8)</text>
+                    
+                    <!-- RAN Layer -->
+                    <rect x="450" y="80" width="500" height="280" rx="10" fill="rgba(79, 172, 254, 0.15)" stroke="#4facfe" stroke-width="3"/>
+                    <text x="700" y="110" text-anchor="middle" fill="#4facfe" font-size="20" font-weight="bold">Radio Access Network (RAN)</text>
+                    
+                    <!-- Physical Layer -->
+                    <rect x="470" y="130" width="220" height="210" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="#00f2fe" stroke-width="2"/>
+                    <text x="580" y="155" text-anchor="middle" fill="#00f2fe" font-size="16" font-weight="bold">Physical Layer</text>
+                    
+                    <rect x="485" y="170" width="190" height="35" rx="5" fill="#1a73e8" opacity="0.9"/>
+                    <text x="580" y="193" text-anchor="middle" fill="#fff" font-size="12">Massive MIMO (256x64)</text>
+                    
+                    <rect x="485" y="215" width="190" height="35" rx="5" fill="#1a73e8" opacity="0.9"/>
+                    <text x="580" y="238" text-anchor="middle" fill="#fff" font-size="12">Beamforming (ZF/MMSE)</text>
+                    
+                    <rect x="485" y="260" width="190" height="35" rx="5" fill="#1a73e8" opacity="0.9"/>
+                    <text x="580" y="283" text-anchor="middle" fill="#fff" font-size="12">OFDM Modulation</text>
+                    
+                    <rect x="485" y="305" width="190" height="30" rx="5" fill="#1a73e8" opacity="0.9"/>
+                    <text x="580" y="325" text-anchor="middle" fill="#fff" font-size="11">256-QAM, Rate 0.9</text>
+                    
+                    <!-- RIS -->
+                    <rect x="710" y="130" width="220" height="100" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="#f5576c" stroke-width="2"/>
+                    <text x="820" y="155" text-anchor="middle" fill="#f5576c" font-size="16" font-weight="bold">RIS Controller</text>
+                    
+                    <rect x="725" y="170" width="190" height="30" rx="5" fill="#e53935" opacity="0.9"/>
+                    <text x="820" y="190" text-anchor="middle" fill="#fff" font-size="12">Phase Optimization</text>
+                    
+                    <rect x="725" y="210" width="190" height="30" rx="5" fill="#e53935" opacity="0.9"/>
+                    <text x="820" y="230" text-anchor="middle" fill="#fff" font-size="11">64 Elements</text>
+                    
+                    <!-- AI Module -->
+                    <rect x="710" y="250" width="220" height="90" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="#ffa726" stroke-width="2"/>
+                    <text x="820" y="275" text-anchor="middle" fill="#ffa726" font-size="16" font-weight="bold">AI/ML Engine</text>
+                    
+                    <rect x="725" y="290" width="190" height="30" rx="5" fill="#fb8c00" opacity="0.9"/>
+                    <text x="820" y="310" text-anchor="middle" fill="#fff" font-size="11">Resource Allocation</text>
+                    
+                    <!-- Core Network -->
+                    <rect x="1070" y="80" width="280" height="280" rx="10" fill="rgba(245, 87, 108, 0.2)" stroke="#f5576c" stroke-width="2"/>
+                    <text x="1210" y="110" text-anchor="middle" fill="#f5576c" font-size="18" font-weight="bold">Core Network</text>
+                    
+                    <rect x="1090" y="130" width="240" height="45" rx="5" fill="url(#grad2)" opacity="0.8"/>
+                    <text x="1210" y="158" text-anchor="middle" fill="#fff" font-size="13">Service-Based Architecture</text>
+                    
+                    <rect x="1090" y="185" width="240" height="45" rx="5" fill="url(#grad2)" opacity="0.8"/>
+                    <text x="1210" y="213" text-anchor="middle" fill="#fff" font-size="13">Edge Computing</text>
+                    
+                    <rect x="1090" y="240" width="240" height="45" rx="5" fill="url(#grad2)" opacity="0.8"/>
+                    <text x="1210" y="268" text-anchor="middle" fill="#fff" font-size="13">Network Orchestration</text>
+                    
+                    <rect x="1090" y="295" width="240" height="45" rx="5" fill="url(#grad2)" opacity="0.8"/>
+                    <text x="1210" y="323" text-anchor="middle" fill="#fff" font-size="13">Digital Twin</text>
+                    
+                    <!-- Connections -->
+                    <path d="M 330 170 L 450 170" stroke="#4facfe" stroke-width="3" fill="none" marker-end="url(#arrowblue)"/>
+                    <text x="390" y="165" fill="#4facfe" font-size="11">10 GHz BW</text>
+                    
+                    <path d="M 950 220 L 1070 220" stroke="#f5576c" stroke-width="3" fill="none" marker-end="url(#arrowred)"/>
+                    <text x="1000" y="215" fill="#f5576c" font-size="11">Backhaul</text>
+                    
+                    <!-- Channel Model -->
+                    <rect x="200" y="400" width="400" height="200" rx="10" fill="rgba(79, 172, 254, 0.15)" stroke="#4facfe" stroke-width="2"/>
+                    <text x="400" y="430" text-anchor="middle" fill="#4facfe" font-size="18" font-weight="bold">THz Channel Model</text>
+                    
+                    <rect x="220" y="450" width="360" height="40" rx="5" fill="rgba(26, 115, 232, 0.3)" stroke="#1a73e8" stroke-width="1"/>
+                    <text x="400" y="475" text-anchor="middle" fill="#fff" font-size="12">Path Loss: Free Space + Molecular Absorption</text>
+                    
+                    <rect x="220" y="500" width="170" height="35" rx="5" fill="#1a73e8" opacity="0.8"/>
+                    <text x="305" y="523" text-anchor="middle" fill="#fff" font-size="11">Rician K=10dB</text>
+                    
+                    <rect x="410" y="500" width="170" height="35" rx="5" fill="#1a73e8" opacity="0.8"/>
+                    <text x="495" y="523" text-anchor="middle" fill="#fff" font-size="11">Multipath (5)</text>
+                    
+                    <rect x="220" y="545" width="360" height="40" rx="5" fill="rgba(26, 115, 232, 0.3)" stroke="#1a73e8" stroke-width="1"/>
+                    <text x="400" y="570" text-anchor="middle" fill="#fff" font-size="12">MIMO Channel: 64×256 Complex Matrix</text>
+                    
+                    <!-- Performance Metrics -->
+                    <rect x="800" y="400" width="400" height="200" rx="10" fill="rgba(245, 87, 108, 0.15)" stroke="#f5576c" stroke-width="2"/>
+                    <text x="1000" y="430" text-anchor="middle" fill="#f5576c" font-size="18" font-weight="bold">Performance Metrics</text>
+                    
+                    <rect x="820" y="450" width="180" height="35" rx="5" fill="#e53935" opacity="0.8"/>
+                    <text x="910" y="473" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Data Rate: 150+ Gbps</text>
+                    
+                    <rect x="1010" y="450" width="180" height="35" rx="5" fill="#e53935" opacity="0.8"/>
+                    <text x="1100" y="473" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Latency: 0.5 ms</text>
+                    
+                    <rect x="820" y="495" width="180" height="35" rx="5" fill="#e53935" opacity="0.8"/>
+                    <text x="910" y="518" text-anchor="middle" fill="#fff" font-size="12">SE: 35+ bps/Hz</text>
+                    
+                    <rect x="1010" y="495" width="180" height="35" rx="5" fill="#e53935" opacity="0.8"/>
+                    <text x="1100" y="518" text-anchor="middle" fill="#fff" font-size="12">BF Gain: 20+ dB</text>
+                    
+                    <rect x="820" y="540" width="370" height="40" rx="5" fill="rgba(229, 57, 53, 0.3)" stroke="#e53935" stroke-width="1"/>
+                    <text x="1005" y="565" text-anchor="middle" fill="#fff" font-size="11">Energy Efficiency: 90% improvement vs 5G</text>
+                    
+                    <!-- MATLAB Integration -->
+                    <rect x="200" y="650" width="1000" height="120" rx="10" fill="rgba(255, 165, 0, 0.15)" stroke="#ffa726" stroke-width="2"/>
+                    <text x="700" y="680" text-anchor="middle" fill="#ffa726" font-size="18" font-weight="bold">MATLAB Simulation & Verification</text>
+                    
+                    <rect x="220" y="700" width="230" height="50" rx="5" fill="#fb8c00" opacity="0.8"/>
+                    <text x="335" y="720" text-anchor="middle" fill="#fff" font-size="12">Physical Layer Sim</text>
+                    <text x="335" y="738" text-anchor="middle" fill="#fff" font-size="10">(Channel, MIMO, BF)</text>
+                    
+                    <rect x="470" y="700" width="230" height="50" rx="5" fill="#fb8c00" opacity="0.8"/>
+                    <text x="585" y="720" text-anchor="middle" fill="#fff" font-size="12">AI/ML Training</text>
+                    <text x="585" y="738" text-anchor="middle" fill="#fff" font-size="10">(DL Beamforming, RL)</text>
+                    
+                    <rect x="720" y="700" width="230" height="50" rx="5" fill="#fb8c00" opacity="0.8"/>
+                    <text x="835" y="720" text-anchor="middle" fill="#fff" font-size="12">Requirements Verification</text>
+                    <text x="835" y="738" text-anchor="middle" fill="#fff" font-size="10">(SR-001, SR-002, SR-005)</text>
+                    
+                    <rect x="970" y="700" width="210" height="50" rx="5" fill="#fb8c00" opacity="0.8"/>
+                    <text x="1075" y="720" text-anchor="middle" fill="#fff" font-size="12">Cameo Export</text>
+                    <text x="1075" y="738" text-anchor="middle" fill="#fff" font-size="10">(JSON/MAT)</text>
+                    
+                    <!-- Arrows -->
+                    <defs>
+                        <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#4facfe" />
+                        </marker>
+                        <marker id="arrowred" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#f5576c" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- Connection lines -->
+                    <path d="M 400 360 L 400 400" stroke="#4facfe" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                    <path d="M 700 360 L 1000 400" stroke="#f5576c" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                    <path d="M 700 600 L 700 650" stroke="#ffa726" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                    
+                    <!-- Frequency Band Label -->
+                    <rect x="50" y="800" width="200" height="60" rx="8" fill="rgba(79, 172, 254, 0.3)" stroke="#4facfe" stroke-width="2"/>
+                    <text x="150" y="825" text-anchor="middle" fill="#4facfe" font-size="14" font-weight="bold">Frequency</text>
+                    <text x="150" y="845" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">140 GHz</text>
+                    
+                    <!-- Bandwidth Label -->
+                    <rect x="270" y="800" width="200" height="60" rx="8" fill="rgba(79, 172, 254, 0.3)" stroke="#4facfe" stroke-width="2"/>
+                    <text x="370" y="825" text-anchor="middle" fill="#4facfe" font-size="14" font-weight="bold">Bandwidth</text>
+                    <text x="370" y="845" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">10 GHz</text>
+                    
+                    <!-- Antenna Config Label -->
+                    <rect x="490" y="800" width="200" height="60" rx="8" fill="rgba(245, 87, 108, 0.3)" stroke="#f5576c" stroke-width="2"/>
+                    <text x="590" y="825" text-anchor="middle" fill="#f5576c" font-size="14" font-weight="bold">MIMO Config</text>
+                    <text x="590" y="845" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold">256×64</text>
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                    <span>User Equipment / RAN</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                    <span>Core Network</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #fb8c00;"></div>
+                    <span>AI/ML Components</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #e53935;"></div>
+                    <span>RIS Technology</span>
+                </div>
+            </div>
+            
+            <div class="description">
+                <h3>📋 System Overview</h3>
+                <p>This architecture represents the complete 6G wireless communication system with THz operation at 140 GHz. The system achieves data rates exceeding 150 Gbps through massive MIMO (256×64), advanced beamforming, and AI-driven resource optimization. MATLAB simulation validates all requirements defined in Cameo SysML models.</p>
+            </div>
+        </div>
+        
+        <!-- Protocol Layers Diagram -->
+        <div id="layers" class="diagram-container">
+            <div class="architecture-svg">
+                <svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+                    <text x="700" y="40" text-anchor="middle" fill="url(#grad1)" font-size="28" font-weight="bold">6G Protocol Stack Architecture</text>
+                    
+                    <!-- Application Layer -->
+                    <rect x="100" y="80" width="1200" height="120" rx="10" fill="rgba(156, 39, 176, 0.2)" stroke="#9c27b0" stroke-width="3"/>
+                    <text x="150" y="115" fill="#ce93d8" font-size="20" font-weight="bold">Application Layer</text>
+                    
+                    <rect x="130" y="135" width="270" height="50" rx="5" fill="#7b1fa2" opacity="0.9"/>
+                    <text x="265" y="165" text-anchor="middle" fill="#fff" font-size="13">Holographic Communication</text>
+                    
+                    <rect x="420" y="135" width="270" height="50" rx="5" fill="#7b1fa2" opacity="0.9"/>
+                    <text x="555" y="165" text-anchor="middle" fill="#fff" font-size="13">Digital Twin Applications</text>
+                    
+                    <rect x="710" y="135" width="270" height="50" rx="5" fill="#7b1fa2" opacity="0.9"/>
+                    <text x="845" y="165" text-anchor="middle" fill="#fff" font-size="13">Tactile Internet (Haptics)</text>
+                    
+                    <rect x="1000" y="135" width="270" height="50" rx="5" fill="#7b1fa2" opacity="0.9"/>
+                    <text x="1135" y="165" text-anchor="middle" fill="#fff" font-size="13">AI-Native Services</text>
+                    
+                    <!-- Network Layer -->
+                    <rect x="100" y="220" width="1200" height="120" rx="10" fill="rgba(33, 150, 243, 0.2)" stroke="#2196f3" stroke-width="3"/>
+                    <text x="150" y="255" fill="#64b5f6" font-size="20" font-weight="bold">Network Layer</text>
+                    
+                    <rect x="130" y="275" width="350" height="50" rx="5" fill="#1976d2" opacity="0.9"/>
+                    <text x="305" y="305" text-anchor="middle" fill="#fff" font-size="13">Intelligent Routing & QoS</text>
+                    
+                    <rect x="500" y="275" width="350" height="50" rx="5" fill="#1976d2" opacity="0.9"/>
+                    <text x="675" y="305" text-anchor="middle" fill="#fff" font-size="13">Edge Computing Orchestration</text>
+                    
+                    <rect x="870" y="275" width="400" height="50" rx="5" fill="#1976d2" opacity="0.9"/>
+                    <text x="1070" y="305" text-anchor="middle" fill="#fff" font-size="13">Network Slicing (eMBB/URLLC/mMTC)</text>
+                    
+                    <!-- MAC Layer -->
+                    <rect x="100" y="360" width="1200" height="120" rx="10" fill="rgba(0, 150, 136, 0.2)" stroke="#009688" stroke-width="3"/>
+                    <text x="150" y="395" fill="#4db6ac" font-size="20" font-weight="bold">MAC Layer</text>
+                    
+                    <rect x="130" y="415" width="270" height="50" rx="5" fill="#00796b" opacity="0.9"/>
+                    <text x="265" y="445" text-anchor="middle" fill="#fff" font-size="13">AI Resource Scheduler</text>
+                    
+                    <rect x="420" y="415" width="270" height="50" rx="5" fill="#00796b" opacity="0.9"/>
+                    <text x="555" y="445" text-anchor="middle" fill="#fff" font-size="13">Grant-Free Access</text>
+                    
+                    <rect x="710" y="415" width="270" height="50" rx="5" fill="#00796b" opacity="0.9"/>
+                    <text x="845" y="445" text-anchor="middle" fill="#fff" font-size="13">HARQ & ARQ</text>
+                    
+                    <rect x="1000" y="415" width="270" height="50" rx="5" fill="#00796b" opacity="0.9"/>
+                    <text x="1135" y="445" text-anchor
